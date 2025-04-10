@@ -6,6 +6,9 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import ch.celia.domine.arithmentally.security.Roles;
+import jakarta.annotation.security.RolesAllowed;
+
 @RestController
 @RequestMapping("/api/player")
 @Validated
@@ -18,6 +21,7 @@ public class PlayerController {
     }
 
     @GetMapping("/me")
+    @RolesAllowed({Roles.Read})
     public ResponseEntity<Player> getCurrentPlayer(@AuthenticationPrincipal Jwt jwt) {
         String keycloakId = jwt.getSubject();
         String name = jwt.getClaim("preferred_username");
