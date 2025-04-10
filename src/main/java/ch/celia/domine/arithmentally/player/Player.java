@@ -1,16 +1,15 @@
 package ch.celia.domine.arithmentally.player;
 
+import ch.celia.domine.arithmentally.game.GameSession;
+import jakarta.persistence.*;
+import lombok.Data;
+
 import java.util.List;
 
-import org.springframework.data.annotation.Id;
+@Entity
+@Data
+public class Player {
 
-import ch.celia.domine.arithmentally.game.GameSession;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.OneToMany;
-    @Entity
-    public class Player {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
