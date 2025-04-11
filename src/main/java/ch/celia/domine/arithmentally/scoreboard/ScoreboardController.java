@@ -21,7 +21,7 @@ public class ScoreboardController {
     }
 
     @GetMapping("/top")
-    @RolesAllowed({Roles.Read})
+    @RolesAllowed({Roles.Admin})
     public ResponseEntity<List<ScoreboardEntry>> getTopScores() {
         return ResponseEntity.ok(scoreboardService.getTop10());
     }

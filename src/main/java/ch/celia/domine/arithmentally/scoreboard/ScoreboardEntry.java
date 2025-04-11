@@ -6,6 +6,8 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Data
 public class ScoreboardEntry {
@@ -22,5 +24,6 @@ public class ScoreboardEntry {
 
     @OneToOne
     @JoinColumn(name = "game_session_id")
+    @JsonIgnore
     private GameSession gameSession;
 }

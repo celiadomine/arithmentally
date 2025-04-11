@@ -16,6 +16,7 @@ public class Question {
     private String correctAnswer;
     private String userAnswer;
     private int timeTaken;
+    private boolean correct;
 
     @ManyToOne
     @JoinColumn(name = "game_session_id")

@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class RoundConfiguration {
 
-    private String operations; // e.g. "+,-,*"
+    private String operations;
     private int minRange;
     private int maxRange;
     private int numberOfQuestions;

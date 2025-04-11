@@ -4,7 +4,6 @@ import ch.celia.domine.arithmentally.player.Player;
 import ch.celia.domine.arithmentally.player.PlayerRepository;
 import ch.celia.domine.arithmentally.question.Question;
 import ch.celia.domine.arithmentally.question.QuestionService;
-
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -31,20 +30,19 @@ public class GameService {
         game.setScore(0);
         game.setDuration(0);
 
-       // List<Question> questions = questionService.generateQuestions(
-       //     config.getOperations(),
-       //     config.getMinRange(),
-       //     config.getMaxRange(),
-       //     config.getNumberOfQuestions()
-       // );
-//
-       // for (Question question : questions) {
-       //     question.setGameSession(game);
-       // }
-//
-       // game.setQuestions(questions);
+        List<Question> questions = questionService.generateQuestions(
+            config.getOperations(),
+            config.getMinRange(),
+            config.getMaxRange(),
+            config.getNumberOfQuestions()
+        );
 
-    return gameRepository.save(game);
+        for (Question question : questions) {
+            question.setGameSession(game);
+        }
+
+        game.setQuestions(questions);
+        return gameRepository.save(game);
     }
 
     public List<GameSession> getGamesForPlayer(Long playerId) {
@@ -61,5 +59,11 @@ public class GameService {
 
     public void deleteGame(Long id) {
         gameRepository.deleteById(id);
+    }
+
+    public void processAnswer(Question question, String userAnswer) {
+        question.setUserAnswer(userAnswer);
+        boolean correct = questionService.checkAnswer(question.getTask(), userAnswer);
+        question.setCorrect(correct);
     }
 }

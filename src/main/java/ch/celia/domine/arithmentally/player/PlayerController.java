@@ -30,4 +30,10 @@ public class PlayerController {
         Player player = playerService.getOrCreatePlayer(keycloakId, name, email);
         return ResponseEntity.ok(player);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletePlayer(@PathVariable Long id) {
+        playerService.deletePlayerById(id);
+        return ResponseEntity.noContent().build(); // 204 No Content
+    }
 }

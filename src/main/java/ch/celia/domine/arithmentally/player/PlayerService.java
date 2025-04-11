@@ -22,4 +22,8 @@ public class PlayerService {
                     return repository.save(player);
                 });
     }
+    
+    public void deletePlayerById(Long id) {
+        repository.deleteById(id);
+    }
 }
