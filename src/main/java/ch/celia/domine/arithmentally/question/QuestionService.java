@@ -23,8 +23,8 @@ public class QuestionService {
 
             Question q = new Question();
             q.setTask(task);
-            q.setCorrectAnswer(answer);
             q.setTimeTaken(0); // until answered
+            q.setCorrect(false); 
             questions.add(q);
         }
 
