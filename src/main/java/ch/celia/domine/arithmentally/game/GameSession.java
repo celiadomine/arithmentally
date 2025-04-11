@@ -7,6 +7,8 @@ import lombok.Data;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Data
 public class GameSession {
@@ -17,6 +19,7 @@ public class GameSession {
 
     @ManyToOne
     @JoinColumn(name = "player_id")
+    @JsonIgnore
     private Player player;
 
     private int score;

@@ -1,18 +1,18 @@
-package ch.celia.domine.arithmentally.repository;
+package ch.celia.domine.arithmentally;
 
 import ch.celia.domine.arithmentally.player.Player;
 import ch.celia.domine.arithmentally.player.PlayerRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Rollback(false) // so data stays in Postgres
-public class PlayerRepositoryTests {
+@Rollback(false)
+class PlayerRepositoryTest {
 
     @Autowired
     private PlayerRepository playerRepository;
@@ -20,14 +20,13 @@ public class PlayerRepositoryTests {
     @Test
     void insertPlayer() {
         Player player = new Player();
-        player.setKeycloakId("1234");
-        player.setName("TestUser");
-        player.setEmail("test@user.com");
-        player.setRole("read");
+        player.setKeycloakId("test-keycloak-id");
+        player.setName("Test Player");
+        player.setEmail("test@example.com");
+        player.setRole("USER");
 
         Player saved = playerRepository.save(player);
-
         Assertions.assertNotNull(saved.getId());
-        Assertions.assertEquals("TestUser", saved.getName());
+        Assertions.assertEquals("Test Player", saved.getName());
     }
 }

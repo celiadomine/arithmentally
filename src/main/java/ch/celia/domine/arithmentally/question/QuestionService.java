@@ -45,4 +45,14 @@ public class QuestionService {
             default -> "0";
         };
     }
+
+    public boolean checkAnswer(String task, String userAnswer) {
+        String[] parts = task.split(" ");
+        int a = Integer.parseInt(parts[0]);
+        String op = parts[1];
+        int b = Integer.parseInt(parts[2]);
+        String correctAnswer = calculate(op, a, b);
+    
+        return correctAnswer.equals(userAnswer.trim());
+    }
 }

@@ -21,9 +21,22 @@ public class QuestionController {
     }
 
     @PostMapping("/generate")
-    @RolesAllowed({Roles.Admin})
+    @RolesAllowed({Roles.Read})
     public ResponseEntity<List<Question>> generateQuestions(@RequestBody QuestionGenerationDTO dto) {
         List<Question> questions = questionService.generateQuestions(dto.getOperations(), dto.getMin(), dto.getMax(), dto.getAmount());
         return ResponseEntity.ok(questions);
     }
+
+    @PostMapping("/answer")
+    @RolesAllowed({Roles.Read})
+    public ResponseEntity<Integer> answerQuestions(@RequestBody List<QuestionAnswerDTO> answers) {
+        int score = 0;
+        for (QuestionAnswerDTO dto : answers) {
+            if (questionService.checkAnswer(dto.getTask(), dto.getUserAnswer())) {
+                score++;
+            }
+        }
+        return ResponseEntity.ok(score);
+    }
+    
 }
