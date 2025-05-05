@@ -26,4 +26,16 @@ public class PlayerService {
     public void deletePlayerById(Long id) {
         repository.deleteById(id);
     }
+
+    public Player updatePlayerById(Long id, Player updatedPlayer) {
+        return repository.findById(id)
+            .map(player -> {
+                player.setName(updatedPlayer.getName());
+                player.setEmail(updatedPlayer.getEmail());
+                player.setRole(updatedPlayer.getRole());
+                return repository.save(player);
+            })
+            .orElseThrow(() -> new RuntimeException("Player not found with ID: " + id));
+    }
+    
 }

@@ -32,8 +32,16 @@ public class PlayerController {
     }
 
     @DeleteMapping("/{id}")
+    @RolesAllowed({Roles.Read})
     public ResponseEntity<?> deletePlayer(@PathVariable Long id) {
         playerService.deletePlayerById(id);
         return ResponseEntity.noContent().build(); // 204 No Content
     }
+
+    @PutMapping("/{id}")
+    @RolesAllowed({Roles.Read})
+    public ResponseEntity<Player> updatePlayer(@PathVariable Long id, @RequestBody Player updatedPlayer) {
+        return ResponseEntity.ok(playerService.updatePlayerById(id, updatedPlayer));
+    }
+
 }
