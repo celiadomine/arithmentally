@@ -13,31 +13,37 @@ export const routes: Routes = [
   },
   {
     path: 'game-setup',
-    component: GameSetupComponent
+    component: GameSetupComponent,
+    data: {
+        pagetitle: 'Game'
+    }
   },
   {
     path: 'game',
-    component: GameComponent
+    component: GameComponent,
+    data: {
+        pagetitle: 'Game'
+    }
   },
   {
     path: 'history',
     component: HistoryComponent,
     data: {
-      pagetitle: 'Spielverlauf'
+      pagetitle: 'History'
     }
   },
   {
     path: 'profile',
     component: ProfileComponent,
     data: {
-      pagetitle: 'Profil'
+      pagetitle: 'Profile'
     }
   },
   {
     path: 'scoreboard',
     component: ScoreboardComponent,
     data: {
-      pagetitle: 'Rangliste'
+      pagetitle: 'Scoreboard'
     }
   }
 ];

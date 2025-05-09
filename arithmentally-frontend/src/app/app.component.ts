@@ -4,18 +4,21 @@ import { MatToolbar } from '@angular/material/toolbar';
 import { MatIcon } from '@angular/material/icon';
 import { MatButton } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
+import { AppRoles } from './app.roles';
+import { AppLoginComponent } from './components/app-login/app-login.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  imports: [MatToolbar, MatButton, MatIcon, MatMenuModule, RouterLink, RouterOutlet]
+  imports: [MatToolbar, MatButton, MatIcon, MatButton, MatMenuModule, RouterLink, AppLoginComponent,RouterOutlet]
 })
 
 export class AppComponent {
 
   public pagetitle = ''
+  public roles = AppRoles;
 
   constructor(private router: Router) {
     this.router.events.subscribe(e => {

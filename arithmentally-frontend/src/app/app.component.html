@@ -1,9 +1,8 @@
 <mat-toolbar color="primary" class="toolbar">
-  <!-- Menu Button -->
-  <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Menü öffnen">
+
+  <button mat-button [matMenuTriggerFor]="menu" aria-label="Menu">
     <mat-icon>menu</mat-icon>
   </button>
-
   <mat-menu #menu="matMenu">
     <button mat-menu-item routerLink="/game-setup">
       <mat-icon>smart_toy</mat-icon>
@@ -21,14 +20,12 @@
       <mat-icon>person</mat-icon>
       <span>Profile</span>
     </button>
-    
-  </mat-menu>
 
+  </mat-menu>  
   <span class="toolbar__pagetitle">{{ pagetitle }}</span>
 
   <span class="spacer"></span>
 
-  <!-- <app-login></app-login> -->
 </mat-toolbar>
 
 <main class="container">
