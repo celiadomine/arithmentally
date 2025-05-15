@@ -5,6 +5,7 @@ import { HistoryComponent } from './pages/history/history.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { ScoreboardComponent } from './pages/scoreboard/scoreboard.component';
 import { NoAccessComponent } from './pages/no-access/no-access.component';
+import { appCanActivate } from './guard/app.auth.guard';
 
 export const routes: Routes = [
   {

@@ -1,14 +1,43 @@
 /* You can add global styles to this file, and also import other style files */
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { 
+  margin: 0; 
+  font-family: Roboto, "Helvetica Neue", sans-serif; 
+  background-color: #F5DCE0; /* pastel pink */
 
-.toolbar {
+}
+
+  .toolbar {
     display: flex;
     align-items: center;
+    background-color: #FC8EAC !important; /* bright pink */
+    color: white;
   }
   
   .spacer {
     flex: 1 1 auto;
   }
   
+  .game-question, .game-setup, .profile-form {
+    padding: 2rem;
+    max-width: 600px;
+    margin: auto;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 2rem;
+  }
+  .actions {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+  }
+  table {
+    width: 90%;
+    margin: 2rem auto;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+  }
