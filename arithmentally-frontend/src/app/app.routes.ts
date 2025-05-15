@@ -8,14 +8,14 @@ import { ScoreboardComponent } from './pages/scoreboard/scoreboard.component';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'game-setup',
+    redirectTo: 'gameSetup',
     pathMatch: 'full'
   },
   {
-    path: 'game-setup',
+    path: 'gameSetup',
     component: GameSetupComponent,
     data: {
-        pagetitle: 'Game'
+        pagetitle: 'Game-Setup'
     }
   },
   {
