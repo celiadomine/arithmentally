@@ -9,6 +9,7 @@ import { MatOption } from '@angular/material/select';
 import { AppLoginComponent } from './components/app-login/app-login.component';
 
 @Component({
+  standalone: true,
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],

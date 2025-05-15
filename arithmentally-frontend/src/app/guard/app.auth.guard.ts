@@ -1,50 +1,41 @@
-import {inject} from '@angular/core';
-import {ActivatedRouteSnapshot, CanActivateChildFn, CanActivateFn, Router, RouterStateSnapshot} from '@angular/router';
-import {OAuthService} from 'angular-oauth2-oidc';
-import {AppAuthService} from '../service/app.auth.service';
+import { inject } from '@angular/core';
+import {
+  ActivatedRouteSnapshot,
+  CanActivateFn,
+  Router,
+  RouterStateSnapshot,
+} from '@angular/router';
+import { OAuthService } from 'angular-oauth2-oidc';
 
 export const appCanActivate: CanActivateFn = (
   route: ActivatedRouteSnapshot,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   state: RouterStateSnapshot
 ) => {
-  const authService: AppAuthService = inject(AppAuthService);
   const oauthService: OAuthService = inject(OAuthService);
   const router = inject(Router);
 
-  let userRoles: string[] = [];
-
-  authService.getRoles().subscribe(roles => {
-    userRoles = roles;
-  });
-
-  if (oauthService.hasValidAccessToken()) {
-    const hasRoles = checkRoles(route, userRoles);
-    if (!hasRoles) {
-      return router.parseUrl('/noaccess');
-    }
-    return hasRoles;
+  if (!oauthService.hasValidAccessToken()) {
+    return router.parseUrl('/noaccess');
   }
-  return router.parseUrl('/noaccess');
-};
 
-function checkRoles(route: ActivatedRouteSnapshot, userRoles: string[]): boolean {
-  const roles = route.data['roles'] as Array<string>;
+  const token = oauthService.getAccessToken();
+  const claims: any = oauthService.getIdentityClaims();
 
-  if (roles === undefined || roles === null || roles.length === 0) {
+  const userRoles: string[] =
+    claims?.resource_access?.arithmentally?.roles ?? [];
+
+  const requiredRoles = route.data['roles'] as string[] | undefined;
+
+  // No roles required? Allow access.
+  if (!requiredRoles || requiredRoles.length === 0) {
     return true;
   }
 
-  if (userRoles === undefined) {
-    return false;
-  }
+  // User must have at least one matching role
+  const hasRole = requiredRoles.some((role) =>
+    userRoles.includes(`ROLE_${role}`)
+  );
 
-  for (const role of roles) {
-    if (userRoles.indexOf(role) > -1) {
-      return true;
-    }
-  }
-  return false;
-}
-
-export const appCanActivateChild: CanActivateChildFn = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => appCanActivate(route, state);
+  return hasRole ? true : router.parseUrl('/noaccess');
+};
