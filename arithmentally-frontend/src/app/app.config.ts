@@ -1,15 +1,40 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationConfig, importProvidersFrom, inject, provideEnvironmentInitializer, provideZoneChangeDetection } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
-
-//import { provideOAuthClient, AuthConfig } from 'angular-oauth2-oidc';
-//import { authConfig } from './config/auth.config'; // create this file below
 import { routes } from './app.routes';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+
+import { AuthConfig, OAuthModule, OAuthStorage, provideOAuthClient } from 'angular-oauth2-oidc';
+
+import { authConfig } from './app.auth';
+import { AppAuthService } from './service/app.auth.service';
+
+export function storageFactory(): OAuthStorage {
+  return sessionStorage;
+}
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
- //   provideOAuthClient(),
-//    { provide: AuthConfig, useValue: authConfig } 
- ]
+    provideHttpClient(withInterceptorsFromDi()),
+
+    importProvidersFrom(
+      BrowserModule,
+      OAuthModule.forRoot({
+        resourceServer: {
+          sendAccessToken: true,
+        },
+      }),
+    ),
+
+    { provide: AuthConfig, useValue: authConfig },
+    { provide: OAuthStorage, useFactory: storageFactory },
+
+    provideOAuthClient(),
+
+    provideEnvironmentInitializer(() =>
+      inject(AppAuthService).initAuth().finally(() => {})
+    ),
+  ],
 };

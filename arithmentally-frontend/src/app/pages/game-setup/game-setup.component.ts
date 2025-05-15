@@ -12,6 +12,7 @@ import { MatLabel } from '@angular/material/form-field';
 import { MatOption } from '@angular/material/select';
 
 @Component({
+  standalone: true,
   selector: 'app-game-setup',
   templateUrl: './game-setup.component.html',
   styleUrl: './game-setup.component.scss',

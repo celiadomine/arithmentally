@@ -4,15 +4,16 @@ import { GameSetupComponent } from './pages/game-setup/game-setup.component';
 import { HistoryComponent } from './pages/history/history.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { ScoreboardComponent } from './pages/scoreboard/scoreboard.component';
+import { NoAccessComponent } from './pages/no-access/no-access.component';
 
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'gameSetup',
+    redirectTo: 'game-setup',
     pathMatch: 'full'
   },
   {
-    path: 'gameSetup',
+    path: 'game-setup',
     component: GameSetupComponent,
     data: {
         pagetitle: 'Game-Setup'
@@ -45,5 +46,9 @@ export const routes: Routes = [
     data: {
       pagetitle: 'Scoreboard'
     }
-  }
+  },
+  {
+    path: 'noaccess',
+    component: NoAccessComponent
+},
 ];
