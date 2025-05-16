@@ -1,6 +1,7 @@
 package ch.celia.domine.arithmentally.scoreboard;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,8 +17,9 @@ public class ScoreboardController {
 
     private final ScoreboardService scoreboardService;
 
-    public ScoreboardController(ScoreboardService scoreboardService) {
+    public ScoreboardController(ScoreboardService scoreboardService, ScoreboardRepository scoreboardRepository) {
         this.scoreboardService = scoreboardService;
+
     }
 
     @GetMapping("/top")

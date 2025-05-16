@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { ScoreboardEntry } from '../models/scoreboard-entry';
+import { ScoreboardEntry } from '../data/scoreboard-entry';
 import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })

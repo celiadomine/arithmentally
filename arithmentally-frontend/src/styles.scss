@@ -11,8 +11,9 @@ body {
   .toolbar {
     display: flex;
     align-items: center;
-    background-color: #FC8EAC !important; /* bright pink */
-    color: white;
+    background-color: #eee;
+    color: var(--mat-sys-primary) !important;
+    font-weight: 500 !important;
   }
   
   .spacer {
@@ -22,11 +23,10 @@ body {
   .game-question, .game-setup, .profile-form {
     padding: 2rem;
     max-width: 600px;
-    margin: auto;
+    margin: 2rem auto !important;
     background: white;
     border-radius: 12px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    margin-top: 2rem;
   }
   .actions {
     margin-top: 1rem;
@@ -34,6 +34,7 @@ body {
     justify-content: flex-end;
     gap: 1rem;
   }
+
   table {
     width: 90%;
     margin: 2rem auto;

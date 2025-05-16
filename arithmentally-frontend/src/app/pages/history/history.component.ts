@@ -1,10 +1,15 @@
-import { Component } from '@angular/core';
-import { GameService } from '../services/game.service';
-import { GameSession } from '../models/game-session';
+import { Component, OnInit } from '@angular/core';
+import { GameService } from '../../service/game.service';
+import { GameSession } from '../../data/game-session';
+import { MatTableModule } from '@angular/material/table';
+import { MatIcon } from '@angular/material/icon';
+
+import { CommonModule } from '@angular/common';
 
 @Component({
+  standalone: true,
   selector: 'app-history',
-  imports: [],
+  imports: [MatIcon, MatTableModule,  CommonModule],
   templateUrl: './history.component.html',
   styleUrl: './history.component.scss'
 })

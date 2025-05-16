@@ -1,13 +1,14 @@
 <p>game works!</p>
-
 <div class="game-question" *ngIf="currentQuestion">
-    <h2>Question {{ currentIndex + 1 }} / {{ totalQuestions }}</h2>
-    <p><strong>{{ currentQuestion.task }}</strong></p>
-    <mat-form-field appearance="fill">
-      <mat-label>Your Answer</mat-label>
-      <input matInput [(ngModel)]="userAnswer" (keyup.enter)="submitAnswer()">
-    </mat-form-field>
-    <div class="actions">
-      <button mat-raised-button color="primary" (click)="submitAnswer()">Next</button>
-    </div>
+  <h2>Question {{ currentIndex + 1 }} / {{ totalQuestions }}</h2>
+  <p><strong>{{ currentQuestion.task }}</strong></p>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Your Answer</mat-label>
+    <input matInput [formControl]="userAnswer" (keyup.enter)="submitAnswer()">
+  </mat-form-field>
+
+  <div class="actions">
+    <button mat-raised-button color="primary" (click)="submitAnswer()">Next</button>
   </div>
+</div>

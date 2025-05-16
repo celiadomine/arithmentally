@@ -1,26 +1,43 @@
-import { Component } from '@angular/core';
-import { ScoreboardService } from '../services/scoreboard.service';
-import { ScoreboardEntry } from '../models/scoreboard-entry';
+import { Component, OnInit } from '@angular/core';
+import { ScoreboardService } from '../../service/scoreboard.service';
+import { ScoreboardEntry } from '../../data/scoreboard-entry';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatIcon } from '@angular/material/icon';
+import { AppRoles } from '../../app.roles';
+import { CommonModule } from '@angular/common';
+import { Observable } from 'rxjs';
+import { HttpResponse } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
+
 
 @Component({
   selector: 'app-scoreboard',
-  imports: [],
+  standalone: true,
+  imports: [MatIcon, MatTableModule, CommonModule],
   templateUrl: './scoreboard.component.html',
-  styleUrl: './scoreboard.component.scss'
+  styleUrls: ['./scoreboard.component.scss']
 })
 export class ScoreboardComponent implements OnInit {
-  entries: ScoreboardEntry[] = [];
+  roles = AppRoles;
   displayedColumns = ['username', 'score', 'duration', 'date', 'actions'];
+  entriesDataSource = new MatTableDataSource<ScoreboardEntry>();
 
   constructor(private scoreboardService: ScoreboardService) {}
 
   ngOnInit(): void {
-    this.scoreboardService.getTop10().subscribe(e => this.entries = e);
+    this.reloadData();
   }
 
-  deleteEntry(id: number): void {
-    this.scoreboardService.deleteEntry(id).subscribe(() => {
-      this.entries = this.entries.filter(e => e.id !== id);
+  reloadData(): void {
+    this.scoreboardService.getTop10().subscribe(entries => {
+      this.entriesDataSource.data = entries;
     });
   }
+
+  //public deleteEntry(id: number): Observable<HttpResponse<string>> {
+  //  return this.http.delete<string>(environment.backendBaseUrl + 'scoreboard/' + id, {
+  //    observe: 'response'
+  //  });
+  //}
+  
 }

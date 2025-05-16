@@ -1,9 +1,14 @@
-import { Component } from '@angular/core';
-import { AppAuthService } from '../service/app.auth.service';
+import { Component, OnInit } from '@angular/core';
+import { AppAuthService } from '../../service/app.auth.service';
+import { PlayerService } from '../../service/player.service';
+import { MatFormField } from '@angular/material/form-field';
+import { MatLabel } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-profile',
-  imports: [],
+  imports: [MatFormField, MatLabel, MatInput, FormsModule],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss'
 })
