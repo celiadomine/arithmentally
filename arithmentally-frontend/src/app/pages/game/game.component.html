@@ -4,7 +4,7 @@
 
   <mat-form-field appearance="fill">
     <mat-label>Your Answer</mat-label>
-    <input matInput [formControl]="userAnswer" (keyup.enter)="submitAnswer()">
+    <input matInput type="number" [formControl]="userAnswer" (keyup.enter)="submitAnswer()">
   </mat-form-field>
 
   <div class="actions">
