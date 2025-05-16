@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class PlayerProfileService {
-  private backendUrl = environment.backendBaseUrl + 'players';
+  private backendUrl = environment.backendBaseUrl + 'player';
 
   constructor(private http: HttpClient) {}
 
