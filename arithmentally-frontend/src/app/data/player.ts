@@ -1,8 +1,7 @@
 export class Player {
-    id!: number;
-    keycloakId!: string;
-    name: string = '';
-    email: string = '';
-    role: string = 'USER';
-  }
-  
+  id!: number;
+  keycloakId!: string;
+  name = '';
+  email = '';
+  role = 'USER';
+}

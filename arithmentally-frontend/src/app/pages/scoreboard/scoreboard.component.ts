@@ -5,10 +5,6 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatIcon } from '@angular/material/icon';
 import { AppRoles } from '../../app.roles';
 import { CommonModule } from '@angular/common';
-import { Observable } from 'rxjs';
-import { HttpResponse } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
-
 
 @Component({
   selector: 'app-scoreboard',
