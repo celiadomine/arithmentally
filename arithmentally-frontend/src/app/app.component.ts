@@ -7,13 +7,14 @@ import { MatMenuModule } from '@angular/material/menu';
 import { AppRoles } from './app.roles';
 import { MatOption } from '@angular/material/select';
 import { AppLoginComponent } from './components/app-login/app-login.component';
+import { AppIsInRolesDirective } from './directives/app-is-in-roles.dir'; 
 
 @Component({
   standalone: true,
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  imports: [MatToolbar, MatButton, MatIcon, MatButton, MatMenuModule, RouterLink, RouterOutlet, MatOption, AppLoginComponent]
+  imports: [ MatToolbar, MatButton, MatIcon, MatButton, MatMenuModule, RouterLink, RouterOutlet, MatOption, AppLoginComponent, AppIsInRolesDirective]
 })
 
 export class AppComponent {

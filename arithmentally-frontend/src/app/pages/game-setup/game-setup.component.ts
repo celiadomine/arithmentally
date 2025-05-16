@@ -10,6 +10,7 @@ import { MatButton } from '@angular/material/button';
 import { MatError } from '@angular/material/form-field';
 import { MatLabel } from '@angular/material/form-field';
 import { MatOption } from '@angular/material/select';
+import { environment } from '../../../environments/environment';
 
 @Component({
   standalone: true,
@@ -42,7 +43,7 @@ export class GameSetupComponent {
         numberOfQuestions: formValues.amount
       };
 
-      this.http.post('/api/games/start', payload).subscribe({
+      this.http.post(environment.backendBaseUrl + 'games/start', payload).subscribe({
         next: res => console.log('Game started!', res),
         error: err => console.error('Game start failed', err)
       });

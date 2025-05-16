@@ -3,8 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AppLoginComponent } from './app-login.component';
 import {AuthConfig, OAuthModule} from 'angular-oauth2-oidc';
 import { HttpClient } from '@angular/common/http';
-import {createSpyFromClass} from 'jasmine-auto-spies';
-import { authConfig } from 'src/app/app.auth';
+import { authConfig } from '../../app.auth';
 
 describe('AppLoginComponent', () => {
   let component: AppLoginComponent;
@@ -17,7 +16,6 @@ describe('AppLoginComponent', () => {
         AppLoginComponent
     ],
     providers: [
-        { provide: HttpClient, useValue: createSpyFromClass(HttpClient) },
         { provide: AuthConfig, useValue: authConfig }
     ],
     teardown: {destroyAfterEach: true}

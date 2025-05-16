@@ -35,14 +35,25 @@ export class AppAuthService {
   }
 
   async initAuth(): Promise<any> {
-    return new Promise<void>(() => {
+    return new Promise<void>((resolve) => {
       this.oauthService.configure(this.authConfig);
-      this.oauthService.events
-        .subscribe(e => this.handleEvents(e));
-      this.oauthService.loadDiscoveryDocumentAndTryLogin();
+      this.oauthService.events.subscribe(e => this.handleEvents(e));
+  
+      this.oauthService.loadDiscoveryDocumentAndTryLogin().then(() => {
+        if (this.oauthService.hasValidAccessToken()) {
+          // optional: avoid infinite reload loop
+          if (!sessionStorage.getItem('reloaded')) {
+            sessionStorage.setItem('reloaded', 'true');
+            window.location.reload();
+          }
+        }
+        resolve();
+      });
+  
       this.oauthService.setupAutomaticSilentRefresh();
     });
   }
+  
 
   public getRoles(): Observable<Array<string>> {
     if (this._decodedAccessToken !== null) {

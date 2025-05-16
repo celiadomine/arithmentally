@@ -4,19 +4,19 @@
     <mat-icon>menu</mat-icon>
   </button>
   <mat-menu #menu="matMenu">
-    <button mat-menu-item routerLink="/game-setup" *isInRoles="[roles.Read]">
+    <button mat-menu-item routerLink="/game-setup" *appIsInRoles="[roles.Read]">
       <mat-icon>smart_toy</mat-icon>
       <span>Game</span>
     </button>
-    <button mat-menu-item routerLink="/history" *isInRoles="[roles.Read]">
+    <button mat-menu-item routerLink="/history" *appIsInRoles="[roles.Read]">
       <mat-icon>history</mat-icon>
       <span>History</span>
     </button>
-    <button mat-menu-item routerLink="/scoreboard" *isInRoles="[roles.Admin]">
+    <button mat-menu-item routerLink="/scoreboard" *appIsInRoles="[roles.Admin]">
       <mat-icon>leaderboard</mat-icon>
       <span>Scoreboard</span>
     </button>
-    <button mat-menu-item routerLink="/profile" *isInRoles="[roles.Read]">
+    <button mat-menu-item routerLink="/profile" *appIsInRoles="[roles.Read]">
       <mat-icon>person</mat-icon>
       <span>Profile</span>
     </button>

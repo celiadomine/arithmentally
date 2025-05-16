@@ -1,23 +1,22 @@
-import { Directive, Input, OnDestroy, OnInit, TemplateRef, ViewContainerRef } from '@angular/core';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { AppAuthService } from '../service/app.auth.service';
+import {Directive, Input, OnDestroy, OnInit, TemplateRef, ViewContainerRef} from '@angular/core';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
+import {AppAuthService} from '../service/app.auth.service';
 
 @Directive({
-  selector: '[isInRoles]' // 
+    selector: '[appIsInRoles]'
 })
-export class IsInRolesDirective implements OnInit, OnDestroy {
+export class AppIsInRolesDirective implements OnInit, OnDestroy {
 
-  @Input() isInRoles?: string[];
-  private stop$ = new Subject<void>();
-  private isVisible = false;
+  @Input() appIsInRoles?: string[];
+  stop$ = new Subject();
+  isVisible = false;
 
   constructor(
     private viewContainerRef: ViewContainerRef,
     private templateRef: TemplateRef<any>,
     private authService: AppAuthService) {
-      
-    }
+  }
 
   ngOnInit() {
     this.authService.getRoles().pipe(
@@ -25,23 +24,26 @@ export class IsInRolesDirective implements OnInit, OnDestroy {
     ).subscribe(roles => {
       if (!roles) {
         this.viewContainerRef.clear();
-        return;
       }
-
-      const hasAllRoles = this.isInRoles?.every(r => roles.includes(r)) ?? false;
-
-      if (hasAllRoles && !this.isVisible) {
-        this.viewContainerRef.createEmbeddedView(this.templateRef);
-        this.isVisible = true;
-      } else if (!hasAllRoles && this.isVisible) {
-        this.viewContainerRef.clear();
+      let found = true;
+      this.appIsInRoles?.forEach(r => {
+        if (!roles.includes(r)) {
+          found = false;
+        }
+      });
+      if (found) {
+        if (!this.isVisible) {
+          this.isVisible = true;
+          this.viewContainerRef.createEmbeddedView(this.templateRef);
+        }
+      } else {
         this.isVisible = false;
+        this.viewContainerRef.clear();
       }
     });
   }
 
   ngOnDestroy() {
-    this.stop$.next();
-    this.stop$.complete();
+    this.stop$.next(null);
   }
 }
