@@ -21,19 +21,18 @@ export class ScoreboardComponent implements OnInit {
   constructor(private scoreboardService: ScoreboardService) {}
 
   ngOnInit(): void {
-    this.reloadData();
+    this.loadEntries();
   }
 
-  reloadData(): void {
+  loadEntries(): void {
     this.scoreboardService.getTop10().subscribe(entries => {
       this.entriesDataSource.data = entries;
     });
   }
 
-  //public deleteEntry(id: number): Observable<HttpResponse<string>> {
-  //  return this.http.delete<string>(environment.backendBaseUrl + 'scoreboard/' + id, {
-  //    observe: 'response'
-  //  });
-  //}
-  
+  deleteEntry(id: number): void {
+    this.scoreboardService.deleteEntry(id).subscribe(() => {
+      this.entriesDataSource.data = this.entriesDataSource.data.filter(e => e.id !== id);
+    });
+  }
 }

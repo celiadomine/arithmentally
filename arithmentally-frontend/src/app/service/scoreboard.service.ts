@@ -17,4 +17,8 @@ export class ScoreboardService {
   saveEntry(entry: ScoreboardEntry): Observable<ScoreboardEntry> {
     return this.http.post<ScoreboardEntry>(this.backendUrl, entry);
   }
+
+  deleteEntry(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.backendUrl}/${id}`);
+  }
 }

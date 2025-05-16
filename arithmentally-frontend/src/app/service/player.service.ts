@@ -5,21 +5,16 @@ import { Player } from '../data/player';
 import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
-export class PlayerService {
+export class PlayerProfileService {
   private backendUrl = environment.backendBaseUrl + 'players';
 
   constructor(private http: HttpClient) {}
 
-  getOrCreatePlayer(): Observable<Player> {
+  getProfile(): Observable<Player> {
     return this.http.get<Player>(`${this.backendUrl}/me`);
   }
 
-  updatePlayer(player: Player): Observable<Player> {
+  updateProfile(player: Player): Observable<Player> {
     return this.http.put<Player>(`${this.backendUrl}/${player.id}`, player);
   }
-
-  deletePlayer(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.backendUrl}/${id}`);
-  }
 }
-
