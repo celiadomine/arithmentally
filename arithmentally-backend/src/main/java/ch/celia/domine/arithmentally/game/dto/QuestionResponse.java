@@ -5,5 +5,6 @@ public class QuestionResponse {
     public int total;
     public int a;
     public int b;
+    public String op;     // "+", "-", "×", "÷"
     public boolean finished;
 }
