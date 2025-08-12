@@ -1,43 +1,40 @@
 package ch.celia.domine.arithmentally.game;
 
-import ch.celia.domine.arithmentally.player.Player;
-import ch.celia.domine.arithmentally.player.PlayerService;
-import ch.celia.domine.arithmentally.security.Roles;
-import jakarta.annotation.security.RolesAllowed;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.validation.annotation.Validated;
+import ch.celia.domine.arithmentally.game.dto.*;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/games")
-@Validated
 public class GameController {
-
-    private final GameService gameService;
-    private final PlayerService playerService;
-
-    public GameController(GameService gameService, PlayerService playerService) {
-        this.gameService = gameService;
-        this.playerService = playerService;
-    }
+    private final GameService service;
+    public GameController(GameService service) { this.service = service; }
 
     @PostMapping("/start")
-    @RolesAllowed({Roles.Read})
-    public ResponseEntity<GameSession> startGame(@AuthenticationPrincipal Jwt jwt, @RequestBody GameStartDTO dto) {
-        Player player = playerService.getOrCreatePlayer(jwt.getSubject(), jwt.getClaim("preferred_username"), jwt.getClaim("email"));
-        GameSession session = gameService.startNewGame(player, dto.toConfiguration());
-        return ResponseEntity.status(201).body(session);
+    public StartGameResponse start(@RequestBody(required = false) StartGameRequest body) {
+        if (body == null) body = new StartGameRequest();
+        return service.start(body);
+        
     }
 
-    @GetMapping("/history")
-    @RolesAllowed({Roles.Read})
-    public ResponseEntity<List<GameSession>> getMyGameHistory(@AuthenticationPrincipal Jwt jwt) {
-        Player player = playerService.getOrCreatePlayer(jwt.getSubject(), jwt.getClaim("preferred_username"), jwt.getClaim("email"));
-        return ResponseEntity.ok(gameService.getGamesForPlayer(player.getId()));
+    @GetMapping("/{id}/current")
+    public QuestionResponse current(@PathVariable("id") Long id) {
+        return service.currentQuestion(id);
+    }
+
+    @PostMapping("/{id}/answer")
+    public ScoreResponse answer(@PathVariable("id") Long id, @RequestBody AnswerRequest body) {
+        return service.answer(id, body);
+    }
+
+    @GetMapping("/{id}/score")
+    public ScoreResponse score(@PathVariable("id") Long id) {
+        return service.currentQuestion(id).finished
+                ? new ScoreResponse(service.history(id).score, service.history(id).total, true)
+                : new ScoreResponse(service.history(id).score, service.history(id).total, false);
+    }
+
+    @GetMapping("/{id}/history")
+    public HistoryResponse history(@PathVariable("id") Long id) {
+        return service.history(id);
     }
 }

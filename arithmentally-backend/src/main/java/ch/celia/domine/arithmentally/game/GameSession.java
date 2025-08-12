@@ -1,34 +1,30 @@
 package ch.celia.domine.arithmentally.game;
 
-import ch.celia.domine.arithmentally.player.Player;
-import ch.celia.domine.arithmentally.question.Question;
 import jakarta.persistence.*;
-import lombok.Data;
-import java.time.LocalDateTime;
-import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.time.Instant;
 
 @Entity
-@Data
 public class GameSession {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String playerName;
+    private Instant startedAt = Instant.now();
+    private int score = 0;
+    private int totalQuestions;
+    private int currentIndex = 0; // 0..totalQuestions-1
+    private boolean finished = false;
 
-    @ManyToOne
-    @JoinColumn(name = "player_id")
-    @JsonIgnore
-    private Player player;
-
-    private int score;
-    private int duration;
-    private LocalDateTime date;
-
-    @Embedded
-    private RoundConfiguration configuration;
-
-    @OneToMany(mappedBy = "gameSession", cascade = CascadeType.ALL)
-    private List<Question> questions;
+    // getters/setters
+    public Long getId() { return id; }
+    public String getPlayerName() { return playerName; }
+    public void setPlayerName(String playerName) { this.playerName = playerName; }
+    public Instant getStartedAt() { return startedAt; }
+    public int getScore() { return score; }
+    public void setScore(int score) { this.score = score; }
+    public int getTotalQuestions() { return totalQuestions; }
+    public void setTotalQuestions(int totalQuestions) { this.totalQuestions = totalQuestions; }
+    public int getCurrentIndex() { return currentIndex; }
+    public void setCurrentIndex(int currentIndex) { this.currentIndex = currentIndex; }
+    public boolean isFinished() { return finished; }
+    public void setFinished(boolean finished) { this.finished = finished; }
 }

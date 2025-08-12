@@ -1,69 +1,100 @@
 package ch.celia.domine.arithmentally.game;
 
-import ch.celia.domine.arithmentally.player.Player;
-import ch.celia.domine.arithmentally.player.PlayerRepository;
-import ch.celia.domine.arithmentally.question.Question;
-import ch.celia.domine.arithmentally.question.QuestionService;
+import ch.celia.domine.arithmentally.game.dto.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class GameService {
+    private final GameSessionRepository sessionRepo;
+    private final GameQuestionRepository questionRepo;
+    private final Random rnd = new Random();
 
-    private final GameRepository gameRepository;
-    private final PlayerRepository playerRepository;
-    private final QuestionService questionService;
-
-    public GameService(GameRepository gameRepository, PlayerRepository playerRepository, QuestionService questionService) {
-        this.gameRepository = gameRepository;
-        this.playerRepository = playerRepository;
-        this.questionService = questionService;
+    public GameService(GameSessionRepository sessionRepo, GameQuestionRepository questionRepo) {
+        this.sessionRepo = sessionRepo;
+        this.questionRepo = questionRepo;
     }
 
-    public GameSession startNewGame(Player player, RoundConfiguration config) {
-        GameSession game = new GameSession();
-        game.setPlayer(player);
-        game.setConfiguration(config);
-        game.setDate(LocalDateTime.now());
-        game.setScore(0);
-        game.setDuration(0);
+    @Transactional
+    public StartGameResponse start(StartGameRequest req) {
+        int total = req.numQuestions == null ? 10 : Math.max(1, req.numQuestions);
+        int min = req.min == null ? 1 : req.min;
+        int max = req.max == null ? 9 : Math.max(min, req.max);
 
-        List<Question> questions = questionService.generateQuestions(
-            config.getOperations(),
-            config.getMinRange(),
-            config.getMaxRange(),
-            config.getNumberOfQuestions()
-        );
+        GameSession s = new GameSession();
+        s.setPlayerName(req.playerName == null ? "Player" : req.playerName);
+        s.setTotalQuestions(total);
+        sessionRepo.save(s);
 
-        for (Question question : questions) {
-            question.setGameSession(game);
+        for (int i = 0; i < total; i++) {
+            int a = rng(min, max); int b = rng(min, max);
+            GameQuestion q = new GameQuestion();
+            q.setSession(s);
+            q.setIdx(i);
+            q.setA(a); q.setB(b);
+            q.setCorrectAnswer(a + b);
+            questionRepo.save(q);
         }
-
-        game.setQuestions(questions);
-        return gameRepository.save(game);
+        return new StartGameResponse(s.getId());
     }
 
-    public List<GameSession> getGamesForPlayer(Long playerId) {
-        return gameRepository.findByPlayerId(playerId);
+    @Transactional(readOnly = true)
+    public QuestionResponse currentQuestion(Long gameId) {
+        GameSession s = sessionRepo.findById(gameId).orElseThrow();
+        QuestionResponse dto = new QuestionResponse();
+        dto.total = s.getTotalQuestions();
+        dto.finished = s.isFinished();
+        if (!s.isFinished()) {
+            GameQuestion q = questionRepo.findBySessionIdAndIdx(gameId, s.getCurrentIndex());
+            dto.index = s.getCurrentIndex();
+            dto.a = q.getA(); dto.b = q.getB();
+        }
+        return dto;
     }
 
-    public GameSession updateGameScore(Long gameId, int score, int duration) {
-        return gameRepository.findById(gameId).map(game -> {
-            game.setScore(score);
-            game.setDuration(duration);
-            return gameRepository.save(game);
-        }).orElseThrow(() -> new RuntimeException("Game not found"));
+    @Transactional
+    public ScoreResponse answer(Long gameId, AnswerRequest body) {
+        GameSession s = sessionRepo.findById(gameId).orElseThrow();
+        if (s.isFinished()) return new ScoreResponse(s.getScore(), s.getTotalQuestions(), true);
+
+        GameQuestion q = questionRepo.findBySessionIdAndIdx(gameId, s.getCurrentIndex());
+        q.setUserAnswer(body.answer);
+        boolean correct = body.answer == q.getCorrectAnswer();
+        q.setIsCorrect(correct);
+        if (correct) s.setScore(s.getScore() + 1);
+        questionRepo.save(q);
+
+        int next = s.getCurrentIndex() + 1;
+        if (next >= s.getTotalQuestions()) {
+            s.setFinished(true);
+        } else {
+            s.setCurrentIndex(next);
+        }
+        sessionRepo.save(s);
+        return new ScoreResponse(s.getScore(), s.getTotalQuestions(), s.isFinished());
     }
 
-    public void deleteGame(Long id) {
-        gameRepository.deleteById(id);
+    @Transactional(readOnly = true)
+    public HistoryResponse history(Long gameId) {
+        GameSession s = sessionRepo.findById(gameId).orElseThrow();
+        List<GameQuestion> list = questionRepo.findBySessionIdOrderByIdxAsc(gameId);
+        List<HistoryItem> items = new ArrayList<>();
+        for (GameQuestion q : list) {
+            HistoryItem hi = new HistoryItem();
+            hi.a = q.getA(); hi.b = q.getB(); hi.correctAnswer = q.getCorrectAnswer();
+            hi.userAnswer = q.getUserAnswer(); hi.isCorrect = q.getIsCorrect();
+            items.add(hi);
+        }
+        HistoryResponse hr = new HistoryResponse();
+        hr.gameId = s.getId(); hr.playerName = s.getPlayerName();
+        hr.score = s.getScore(); hr.total = s.getTotalQuestions();
+        hr.questions = items;
+        return hr;
     }
 
-    public void processAnswer(Question question, String userAnswer) {
-        question.setUserAnswer(userAnswer);
-        boolean correct = questionService.checkAnswer(question.getTask(), userAnswer);
-        question.setCorrect(correct);
-    }
+    private int rng(int min, int max) { return min + rnd.nextInt((max - min) + 1); }
 }
