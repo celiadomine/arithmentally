@@ -15,7 +15,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 
-class GameServiceAllPathsTest {
+class GameServiceWhiteBoxTest {
 
   GameSessionRepository sessionRepo;
   GameQuestionRepository questionRepo;
