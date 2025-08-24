@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * ScoreEngine – rules summary (human-readable)
+ * Rules summary
  *
  * Per answer (applyAnswer):
  *  - Base points for a correct answer: +1
